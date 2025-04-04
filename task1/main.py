@@ -109,24 +109,33 @@ def evaluate_rpn(rpn):
 
 def main():
     input_file = "input01.txt"
+    output_file = "output1.txt"
 
     if not os.path.exists(input_file):
         print(f"Помилка: файл {input_file} не знайдено!")
         return
 
     try:
-        with open(input_file, 'r', encoding='utf-8') as f:
-            for line in f:
+        with open(input_file, 'r', encoding='utf-8') as f_in, \
+                open(output_file, 'w', encoding='utf-8') as f_out:
+
+            for line in f_in:
                 line = line.strip()
                 if line:
                     try:
                         rpn = shunting_yard(line)
                         result = evaluate_rpn(rpn)
-                        print(result)
+                        f_out.write(f"{result}\n")
+                        print(f"Результат: {result}")
                     except Exception as e:
-                        print(f"Помилка у виразі: {str(e)}")
+                        error_msg = f"Помилка у виразі '{line}': {str(e)}"
+                        f_out.write(f"{error_msg}\n")
+                        print(error_msg)
+
+        print(f"Результати збережено у файл {output_file}")
+
     except Exception as e:
-        print(f"Помилка при читанні файлу: {str(e)}")
+        print(f"Помилка при роботі з файлами: {str(e)}")
 
 
 if __name__ == "__main__":
